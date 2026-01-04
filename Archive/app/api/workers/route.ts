@@ -1,85 +1,70 @@
-// app/api/workers/route.ts
 import { NextResponse } from "next/server";
 import fs from "node:fs/promises";
 import path from "node:path";
 import Papa from "papaparse";
+import type { WorkersCSVRow, WorkersResponse, WorkersErrorResponse } from "../../Types/api";
+import { cleanRegion, parseBoolean, parseNumber } from "../utils/workers";
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
 
-const ALLOWED = [
-  "Sydney", "Melbourne", "Brisbane", "Adelaide", "Perth",
-  "Canberra", "Hobart", "Darwin",
-  "Gold Coast", "Sunshine Coast", "Newcastle", "Wollongong", "Geelong"
-];
+const CSV_FILE_PATH = "support_workers_clean.csv";
 
-const titleCase = (s: string) =>
-  s.toLowerCase().replace(/\s+/g, " ").trim().replace(/\b\w/g, c => c.toUpperCase());
+function transformCSVRow(row: WorkersCSVRow, id: number): WorkersResponse | null {
+  const name = (row.name ?? "").trim();
+  const region = cleanRegion(row.region);
 
-function cleanRegion(raw: unknown): string {
-  if (raw == null) return "";
-  let s = String(raw);
-  s = s.split(/[,/|-]/)[0];
-  s = titleCase(s);
-  if (/^nsw$/i.test(s)) return "Sydney";
-  if (/^vic$/i.test(s)) return "Melbourne";
-  if (/^qld$/i.test(s)) return "Brisbane";
-  if (/^sa$/i.test(s))  return "Adelaide";
-  if (/^wa$/i.test(s))  return "Perth";
-  if (/^act$/i.test(s)) return "Canberra";
-  if (/^tas$/i.test(s)) return "Hobart";
-  if (/^nt$/i.test(s))  return "Darwin";
-  return ALLOWED.includes(s) ? s : "";
+  // Skip rows without valid region
+  if (!region) return null;
+
+  return {
+    id: String(id),
+    name,
+    region,
+    is_australian: parseBoolean(row.is_australian),
+    experience_years: parseNumber(row.experience_years),
+    qualification: row.qualification ?? "",
+    previous_role: row.previous_role ?? "",
+    previous_work_place: row.previous_work_place ?? "",
+    name_lc: name.toLowerCase(),
+  };
 }
-
-type Row = {
-  name?: string;
-  region?: string;
-  is_australian?: string | boolean | number;
-  experience_years?: string | number;
-  qualification?: string;
-  previous_role?: string;
-  previous_work_place?: string;
-};
 
 export async function GET() {
   try {
-    const filePath = path.join(process.cwd(), "public", "support_workers_clean.csv");
+    const filePath = path.join(process.cwd(), "public", CSV_FILE_PATH);
+
+    // Read CSV file
     const csv = await fs.readFile(filePath, "utf8");
 
-    const parsed = Papa.parse<Row>(csv, {
+    // Parse CSV
+    const parsed = Papa.parse<WorkersCSVRow>(csv, {
       header: true,
       skipEmptyLines: true,
-      transformHeader: (h) => h.replace(/^\uFEFF/, "").trim(),
+      transformHeader: (h) => h.replace(/^\uFEFF/, "").trim(), // Remove BOM
     });
 
+    // Transform rows
     let id = 0;
-    const rows = (parsed.data as Row[])
-      .map((r) => {
-        const name = (r.name ?? "").trim();
-        const region = cleanRegion(r.region);
-        const isAu = /^(true|yes|y|1)$/i.test(String(r.is_australian ?? ""));
-        const exp = Number(r.experience_years ?? 0) || 0;
-
-        return {
-          id: String(++id),
-          name,
-          region,
-          is_australian: isAu,
-          experience_years: exp,
-          qualification: r.qualification ?? "",
-          previous_role: r.previous_role ?? "",
-          previous_work_place: r.previous_work_place ?? "",
-          name_lc: name.toLowerCase(),
-        };
+    const workers: WorkersResponse[] = parsed.data
+      .map((row) => {
+        id++;
+        return transformCSVRow(row, id);
       })
-      .filter((x) => x.region);
+      .filter((worker): worker is WorkersResponse => worker !== null);
 
-    rows.sort((a, b) => b.experience_years - a.experience_years);
+    // Sort by experience (highest first)
+    workers.sort((a, b) => b.experience_years - a.experience_years);
 
-    return NextResponse.json(rows, { headers: { "Cache-Control": "no-store" } });
-  } catch (e: unknown) {
-    const msg = e instanceof Error ? e.message : "failed";
-    return NextResponse.json({ error: msg }, { status: 500 });
+    return NextResponse.json(workers, {
+      headers: { "Cache-Control": "no-store" },
+    });
+  } catch (err: unknown) {
+    const message = err instanceof Error ? err.message : "Failed to load workers";
+    console.error("[/api/workers] error:", err);
+    return NextResponse.json(
+      { error: message } as WorkersErrorResponse,
+      { status: 500 }
+    );
   }
 }

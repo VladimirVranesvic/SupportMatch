@@ -1,59 +1,87 @@
-// app/api/request/route.ts
 import { NextResponse } from "next/server";
 import { Resend } from "resend";
+import type { RequestRequestBody, RequestResponse } from "../../Types/api";
+import { isValidEmail } from "../../Types/api";
 
 export const runtime = "nodejs";
 
-type RequestBody = {
-  name: string;
-  email: string; // replyTo로 사용할 발신자 이메일
-  company?: string;
-  location?: string;
-  role?: string;
-  phone?: string;
-  needs?: string;
-};
+function validateRequest(body: unknown): body is RequestRequestBody {
+  if (!body || typeof body !== "object") return false;
+  const b = body as Record<string, unknown>;
+  return (
+    typeof b.name === "string" &&
+    b.name.trim().length > 0 &&
+    typeof b.email === "string" &&
+    b.email.trim().length > 0
+  );
+}
 
-function isValidEmail(s: string | undefined): s is string {
-  if (!s) return false;
-  // very light validation; Resend는 자체적으로 더 엄격 체크함
-  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(s);
+function formatEmailBody(body: RequestRequestBody): string {
+  return `
+Name: ${body.name}
+Email: ${body.email}
+Company: ${body.company || "Not provided"}
+Location: ${body.location || "Not provided"}
+Role: ${body.role || "Not provided"}
+Phone: ${body.phone || "Not provided"}
+Supports / Needs:
+${body.needs || "Not provided"}
+  `.trim();
 }
 
 export async function POST(req: Request) {
   try {
-    const body = (await req.json()) as RequestBody;
+    // Validate environment variables
+    if (!process.env.RESEND_API_KEY) {
+      console.error("[/api/request] RESEND_API_KEY is not set");
+      return NextResponse.json(
+        { ok: false, error: "Server configuration error" } as RequestResponse,
+        { status: 500 }
+      );
+    }
 
-    const resend = new Resend(process.env.RESEND_API_KEY!);
-    console.log("[request] TO_EMAIL =", process.env.TO_EMAIL);
+    if (!process.env.TO_EMAIL) {
+      console.error("[/api/request] TO_EMAIL is not set");
+      return NextResponse.json(
+        { ok: false, error: "Server configuration error" } as RequestResponse,
+        { status: 500 }
+      );
+    }
 
-    const text = `
-Name: ${body.name}
-Email: ${body.email}
-Company: ${body.company || ""}
-Location: ${body.location || ""}
-Role: ${body.role || ""}
-Phone: ${body.phone || ""}
-Supports / Needs:
-${body.needs || ""}
-    `.trim();
+    // Parse and validate request body
+    const body = (await req.json()) as unknown;
+    
+    if (!validateRequest(body)) {
+      return NextResponse.json(
+        { ok: false, error: "Invalid request: name and email are required" } as RequestResponse,
+        { status: 400 }
+      );
+    }
 
-    // replyTo는 유효한 이메일만 넣기 (Resend 422 방지)
+    // Initialize Resend
+    const resend = new Resend(process.env.RESEND_API_KEY);
+
+    // Format email content
+    const emailText = formatEmailBody(body);
     const replyTo = isValidEmail(body.email) ? body.email : undefined;
 
+    // Send email
     await resend.emails.send({
-      from: "Support Match <admin@supportmatch.com.au>",  // ← 고정
-      to: process.env.TO_EMAIL!,
+      from: "Support Match <admin@supportmatch.com.au>",
+      to: process.env.TO_EMAIL,
       replyTo,
       subject: "New support request",
-      text,
+      text: emailText,
     });
 
-    return NextResponse.json({ ok: true });
+    return NextResponse.json({ ok: true } as RequestResponse);
   } catch (err: unknown) {
     const message =
       err instanceof Error ? err.message : typeof err === "string" ? err : "Unknown error";
     console.error("[/api/request] send failed:", err);
-    return NextResponse.json({ ok: false, error: message }, { status: 500 });
+    return NextResponse.json(
+      { ok: false, error: message } as RequestResponse,
+      { status: 500 }
+    );
   }
 }
