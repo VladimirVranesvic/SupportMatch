@@ -40,8 +40,14 @@ next-env.d.ts
 # IDE
 .vscode/
 .idea/
+Idea/         
 *.swp
 *.swo
+*.iml
 
 # OS
 Thumbs.db
+
+# Python (if you keep any Python scripts)
+__pycache__/
+*.pyc
