@@ -16,6 +16,7 @@ interface FormData {
   role: string;
   needs: string;
   phone: string;
+  website: string;
 }
 
 interface HeroProps {
@@ -24,9 +25,10 @@ interface HeroProps {
   onSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
   sending: boolean;
   submitted: boolean;
+  error: string | null;
 }
 
-export default function Hero({ form, onChange, onSubmit, sending, submitted }: HeroProps) {
+export default function Hero({ form, onChange, onSubmit, sending, submitted, error }: HeroProps) {
   return (
     <section id="top" className="relative overflow-hidden">
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_top_left,rgba(236,72,153,0.25),transparent_40%),radial-gradient(ellipse_at_bottom_right,rgba(147,51,234,0.25),transparent_40%)]" />
@@ -70,6 +72,29 @@ export default function Hero({ form, onChange, onSubmit, sending, submitted }: H
           </div>
           {!submitted ? (
             <form onSubmit={onSubmit} className="grid grid-cols-1 gap-4">
+              {/* Honeypot field - hidden from users but visible to bots */}
+              <input
+                type="text"
+                name="website"
+                value={form.website}
+                onChange={onChange}
+                tabIndex={-1}
+                autoComplete="off"
+                style={{
+                  position: "absolute",
+                  left: "-9999px",
+                  width: "1px",
+                  height: "1px",
+                  opacity: 0,
+                  pointerEvents: "none",
+                }}
+                aria-hidden="true"
+              />
+              {error && (
+                <div className="rounded-xl border border-red-200 bg-red-50 p-3 text-sm text-red-700">
+                  {error}
+                </div>
+              )}
               <div className="grid gap-1">
                 <label htmlFor="name" className="text-sm font-medium">Your name</label>
                 <input id="name" name="name" onChange={onChange} value={form.name} required className="rounded-xl border border-slate-300 px-3 py-2 focus:border-pink-500 focus:outline-none" />

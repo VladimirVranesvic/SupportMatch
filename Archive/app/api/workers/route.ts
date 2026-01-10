@@ -1,6 +1,8 @@
 import { NextResponse } from 'next/server';
 import { supabase } from '../../lib/supabase';
 import type { Candidate, WorkersErrorResponse } from '../../Types/api';
+import { calculateTier } from '../utils/tierCalculation';
+import { formatName } from '../utils/workers';
 
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
@@ -17,17 +19,39 @@ export async function GET() {
     }
 
     // Transform to match your Candidate type
-    const workers: Candidate[] = (data || []).map((w) => ({
-      id: w.id,
-      name: w.name,
-      region: w.region,
-      is_australian: w.is_australian,
-      experience_years: w.experience_years,
-      qualification: w.qualification,
-      previous_role: w.previous_role,
-      previous_work_place: w.previous_work_place,
-      name_lc: w.name_lc,
-    }));
+    const workers: Candidate[] = (data || []).map((w) => {
+      const worker = {
+        id: w.id,
+        name: formatName(w.name || ''),
+        region: w.region,
+        is_australian: w.is_australian,
+        experience_years: w.experience_years,
+        qualification: w.qualification || '',
+        previous_role: w.previous_role || '',
+        previous_work_place: w.previous_work_place || '',
+        name_lc: (w.name || '').toLowerCase(),
+      };
+
+      // Calculate tier based on missing fields
+      const tier = calculateTier({
+        qualification: worker.qualification,
+        previous_role: worker.previous_role,
+        previous_work_place: worker.previous_work_place,
+      });
+
+      return {
+        ...worker,
+        tier,
+      };
+    });
+
+    // Sort by tier first (lower is better), then by experience
+    workers.sort((a, b) => {
+      if (a.tier !== b.tier) {
+        return a.tier - b.tier; // Lower tier first
+      }
+      return b.experience_years - a.experience_years; // Higher experience first
+    });
 
     return NextResponse.json(workers, {
       headers: { 'Cache-Control': 'no-store' },

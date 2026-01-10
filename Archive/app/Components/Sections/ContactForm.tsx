@@ -12,6 +12,7 @@ interface FormData {
   role: string;
   needs: string;
   phone: string;
+  website: string;
 }
 
 interface ContactFormProps {
@@ -19,9 +20,10 @@ interface ContactFormProps {
   onChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => void;
   onSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
   sending: boolean;
+  error: string | null;
 }
 
-export default function ContactForm({ form, onChange, onSubmit, sending }: ContactFormProps) {
+export default function ContactForm({ form, onChange, onSubmit, sending, error }: ContactFormProps) {
   return (
     <section id="request" className="relative overflow-hidden py-16 sm:py-24">
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_bottom_left,rgba(236,72,153,0.18),transparent_40%),radial-gradient(ellipse_at_top_right,rgba(147,51,234,0.18),transparent_40%)]" />
@@ -33,6 +35,29 @@ export default function ContactForm({ form, onChange, onSubmit, sending }: Conta
 
         <div className="mx-auto mt-10 max-w-3xl rounded-3xl border border-slate-200 bg-white p-6 shadow-xl">
           <form onSubmit={onSubmit} className="grid grid-cols-1 gap-4">
+            {/* Honeypot field - hidden from users but visible to bots */}
+            <input
+              type="text"
+              name="website"
+              value={form.website}
+              onChange={onChange}
+              tabIndex={-1}
+              autoComplete="off"
+              style={{
+                position: "absolute",
+                left: "-9999px",
+                width: "1px",
+                height: "1px",
+                opacity: 0,
+                pointerEvents: "none",
+              }}
+              aria-hidden="true"
+            />
+            {error && (
+              <div className="rounded-xl border border-red-200 bg-red-50 p-3 text-sm text-red-700">
+                {error}
+              </div>
+            )}
             <div className="grid gap-1">
               <label htmlFor="name2" className="text-sm font-medium">Your name</label>
               <input

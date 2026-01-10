@@ -3,7 +3,7 @@ import path from 'path';
 import Papa from 'papaparse';
 import { config } from 'dotenv';
 import { createClient } from '@supabase/supabase-js';  // ← Changed: import createClient directly
-import { cleanRegion, parseBoolean, parseNumber } from '../app/api/utils/workers';
+import { cleanRegion, parseBoolean, parseNumber, formatName } from '../app/api/utils/workers';
 
 // Load environment variables from .env.local FIRST
 config({ path: path.join(process.cwd(), '.env.local') });
@@ -56,24 +56,24 @@ async function migrate() {
   console.log(`Total CSV rows: ${parsed.data.length}`);
 
   const workers = parsed.data
-    .map((row) => {
-      const name = (row.name ?? '').trim();
-      const region = cleanRegion(row.region);
+  .map((row) => {
+    const name = formatName((row.name ?? '').trim());
+    const region = cleanRegion(row.region);
 
-      if (!region || !name) return null;
+    if (!region || !name) return null;
 
-      return {
-        name,
-        region,
-        is_australian: parseBoolean(row.is_australian),
-        experience_years: parseNumber(row.experience_years),
-        qualification: row.qualification ?? '',
-        previous_role: row.previous_role ?? '',
-        previous_work_place: row.previous_work_place ?? '',
-        name_lc: name.toLowerCase(),
-      };
-    })
-    .filter((w): w is NonNullable<typeof w> => w !== null);
+    return {
+      name,
+      region,
+      is_australian: parseBoolean(row.is_australian),
+      experience_years: parseNumber(row.experience_years),
+      qualification: row.qualification ?? '',
+      previous_role: row.previous_role ?? '',
+      previous_work_place: row.previous_work_place ?? '',
+      name_lc: name.toLowerCase(),
+    };
+  })
+  .filter((w): w is NonNullable<typeof w> => w !== null);
 
   console.log(`Valid workers to insert: ${workers.length}`);
 
