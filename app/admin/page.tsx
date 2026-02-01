@@ -1,12 +1,10 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import Container from "../Components/UI/Container";
-import GradientText from "../Components/UI/GradientText";
-import PrimaryButton from "../Components/UI/PrimaryButton";
-import GhostButton from "../Components/UI/GhostButton";
-import SubmitButton from "../Components/UI/SubmitButton";
-import type { Request } from "../Types/api";
+import Container from "../UI/Container";
+import GradientText from "../UI/GradientText";
+import SubmitButton from "../UI/SubmitButton";
+import type { Request } from "../../Types/api";
 
 export default function AdminPage() {
   const [requests, setRequests] = useState<Request[]>([]);
@@ -25,6 +23,7 @@ export default function AdminPage() {
     } else {
       setLoading(false);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps - Empty array is intentional
   }, []);
 
   const handleLogin = (e: React.FormEvent) => {

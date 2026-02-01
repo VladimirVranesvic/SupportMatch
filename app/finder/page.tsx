@@ -1,15 +1,15 @@
 "use client";
 
 import React from "react";
-import Container from "../Components/UI/Container";
-import GradientText from "../Components/UI/GradientText";
-import Filters from "../Components/Sections/Finder/Filters";
-import WorkersCard from "../Components/Sections/Finder/WorkersCard";
-import Pagination from "../Components/Sections/Finder/Pagination";
-import ResultsCount from "../Components/Sections/Finder/ResultsCount";
-import { useWorkers } from "../hooks/useWorkers";
-import { useWorkerFilters } from "../hooks/useWorkerFilters";
-import { usePagination } from "../hooks/usePagination";
+import Container from "../UI/Container";
+import GradientText from "../UI/GradientText";
+import Filters from "../Sections/Finder/Filters";
+import WorkersCard from "../Sections/Finder/WorkersCard";
+import Pagination from "../Sections/Finder/Pagination";
+import ResultsCount from "../Sections/Finder/ResultsCount";
+import { useWorkers } from "../../hooks/useWorkers";
+import { useWorkerFilters } from "../../hooks/useWorkerFilters";
+import { usePagination } from "../../hooks/usePagination";
 
 export default function FinderPage() {
   const { data, loading, error } = useWorkers();

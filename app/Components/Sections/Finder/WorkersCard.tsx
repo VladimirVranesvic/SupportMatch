@@ -1,5 +1,4 @@
 import React from "react";
-import Link from "next/link";
 import { MapPin } from "lucide-react";
 import Tag from "../../UI/Tag";
 import PrimaryButton from "../../UI/PrimaryButton";
