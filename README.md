@@ -29,8 +29,8 @@ A short summary of the main updates to the Support Match website.
 - Limits on how often the same person can submit (to prevent abuse).
 
 **Admin area**
-- A separate admin page where staff can log in with an API key and view all contact form submissions.
-- You can search by email, see full details (name, company, location, role, phone, needs), and export data.
+- A separate admin page where staff can log in with an API key (samgay) and view all contact form submissions.
+- You can search by email, see full details (name, company, location, role, phone, needs), and export data (as CSV file/s).
 - Login is stored in the browser so you don’t have to log in every time.
 
 **Worker listings**
@@ -52,3 +52,10 @@ A short summary of the main updates to the Support Match website.
 **Database**
 - Supabase should have `requests` and `workers` tables.
 - To load workers from a CSV into the database, run: `npm run migrate`
+
+---
+
+## Potential updates
+
+- **Login for clients** – Let visitors create an account and log in so they can see their past inquiries and save workers they’re interested in (e.g. a shortlist or favourites).
+- **Richer worker cards** – Show more detail on each worker card (e.g. bio, skills, availability) and add a photo so clients can get a better sense of who they’re matching with.
