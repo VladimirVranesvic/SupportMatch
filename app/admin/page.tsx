@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import Container from "../Components/UI/Container";
 import GradientText from "../Components/UI/GradientText";
 import SubmitButton from "../Components/UI/SubmitButton";
@@ -13,6 +13,43 @@ export default function AdminPage() {
   const [apiKey, setApiKey] = useState("");
   const [authenticated, setAuthenticated] = useState(false);
 
+  const handleLogin = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (apiKey.trim()) {
+      localStorage.setItem("admin_api_key", apiKey);
+      setAuthenticated(true);
+      fetchRequests(apiKey);
+    }
+  };
+
+  const handleLogout = useCallback(() => {
+    localStorage.removeItem("admin_api_key");
+    setApiKey("");
+    setAuthenticated(false);
+    setRequests([]);
+  }, []);
+  
+  const fetchRequests = useCallback(async (key: string) => {
+    setLoading(true);
+    setError(null);
+    try {
+      const res = await fetch("/api/admin/requests?limit=100", {
+        headers: { Authorization: `Bearer ${key}` },
+      });
+      const json = await res.json();
+      if (json.ok) {
+        setRequests(json.requests || []);
+      } else {
+        setError(json.error || "Failed to load requests");
+        if (res.status === 401) handleLogout();
+      }
+    } catch {
+      setError("Network error. Please try again.");
+    } finally {
+      setLoading(false);
+    }
+  }, [handleLogout]);
+
   // Check if API key is stored in localStorage
   useEffect(() => {
     const stored = localStorage.getItem("admin_api_key");
@@ -23,51 +60,7 @@ export default function AdminPage() {
     } else {
       setLoading(false);
     }
-  }, []);
-
-  const handleLogin = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (apiKey.trim()) {
-      localStorage.setItem("admin_api_key", apiKey);
-      setAuthenticated(true);
-      fetchRequests(apiKey);
-    }
-  };
-
-  const handleLogout = () => {
-    localStorage.removeItem("admin_api_key");
-    setApiKey("");
-    setAuthenticated(false);
-    setRequests([]);
-  };
-
-  const fetchRequests = async (key: string) => {
-    setLoading(true);
-    setError(null);
-
-    try {
-      const res = await fetch("/api/admin/requests?limit=100", {
-        headers: {
-          Authorization: `Bearer ${key}`,
-        },
-      });
-
-      const json = await res.json();
-
-      if (json.ok) {
-        setRequests(json.requests || []);
-      } else {
-        setError(json.error || "Failed to load requests");
-        if (res.status === 401) {
-          handleLogout();
-        }
-      }
-    } catch (err) {
-      setError("Network error. Please try again.");
-    } finally {
-      setLoading(false);
-    }
-  };
+  }, [fetchRequests]);
 
   const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleString("en-AU", {
