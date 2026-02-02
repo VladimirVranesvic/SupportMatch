@@ -55,6 +55,18 @@ A short summary of the main updates to the Support Match website.
 
 ---
 
+## To do list
+
+**Images**
+- Add required images to the site, workout an appropriate layout that will not effect the functionality of the site.
+
+## Hosting 
+
+**Host the new site at supportmatch.com**
+-
+
+---
+
 ## Potential updates
 
 - **Login for clients** – Let visitors create an account and log in so they can see their past inquiries and save workers they’re interested in (e.g. a shortlist or favourites).
