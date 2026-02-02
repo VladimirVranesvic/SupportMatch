@@ -1,5 +1,3 @@
-import type { Candidate } from "../../Types/api";
-
 /**
  * Calculate tier based on missing optional fields
  * Tier 1 = all optional fields present

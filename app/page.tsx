@@ -14,17 +14,16 @@ import Footer from "./Components/Sections/Footer";
 import { useRequestForm } from "./hooks/useRequestForm";
 
 export default function SupportMatchSite() {
-  const { form, sending, submitted, error, onChange, onSubmit } = useRequestForm();
+  const { form, sending, error, submitted, onChange, onSubmit } = useRequestForm();
 
   return (
     <div className="min-h-screen scroll-smooth bg-white text-slate-900">
-      <Navbar />
-      <Hero 
-        form={form} 
-        onChange={onChange} 
-        onSubmit={onSubmit} 
-        sending={sending} 
-        submitted={submitted} 
+      <Hero
+        form={form}
+        onChange={onChange}
+        onSubmit={onSubmit}
+        sending={sending}
+        submitted={submitted}
         error={error}
       />
       <Features />
@@ -37,7 +36,8 @@ export default function SupportMatchSite() {
         form={form} 
         onChange={onChange} 
         onSubmit={onSubmit} 
-        sending={sending} 
+        sending={sending}
+        error={error}
       />
       <Footer />
     </div>
