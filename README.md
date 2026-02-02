@@ -35,7 +35,7 @@ A short summary of the main updates to the Support Match website.
 
 **Worker listings**
 - Workers are given a simple “tier” score based on how complete their profile is, so better profiles can be shown first.
-- The finder page and filters work with the new database and tier system.
+- The finder page and filters work with the n ew database and tier system.
 
 **Security and quality**
 - Rate limiting and email validation reduce spam and abuse.
@@ -59,15 +59,14 @@ A short summary of the main updates to the Support Match website.
 
 **Images**
 - Add required images to the site, workout an appropriate layout that will not effect the functionality of the site.
-
-## Hosting 
-
-**Host the new site at supportmatch.com**
+**Host the site at supportmatch.com**
 -
 
 ---
 
 ## Potential updates
 
-- **Login for clients** – Let visitors create an account and log in so they can see their past inquiries and save workers they’re interested in (e.g. a shortlist or favourites).
-- **Richer worker cards** – Show more detail on each worker card (e.g. bio, skills, availability) and add a photo so clients can get a better sense of who they’re matching with.
+**Login for clients** 
+– Let visitors create an account and log in so they can see their past inquiries and save workers they’re interested in (e.g. a shortlist or favourites).
+**Richer worker cards** 
+– Show more detail on each worker card (e.g. bio, skills, availability) and add a photo so clients can get a better sense of who they’re matching with.
