@@ -2,6 +2,7 @@
 
 import React from "react";
 import Hero from "./Components/Sections/Hero";
+import Navbar from "./Components/Sections/Navbar";
 import Features from "./Components/Sections/Features";
 import HowItWorks from "./Components/Sections/HowItWorks";
 import Coordinators from "./Components/Sections/Coordinators";
@@ -17,6 +18,7 @@ export default function SupportMatchSite() {
 
   return (
     <div className="min-h-screen scroll-smooth bg-white text-slate-900">
+      <Navbar />
       <Hero
         form={form}
         onChange={onChange}
