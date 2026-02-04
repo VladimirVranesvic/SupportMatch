@@ -59,8 +59,7 @@ A short summary of the main updates to the Support Match website.
 
 **Images**
 - Add required images to the site, workout an appropriate layout that will not effect the functionality of the site.
-**Host the site at supportmatch.com**
--
+**Host the site at supportmatch.com** - Complete 
 
 ---
 

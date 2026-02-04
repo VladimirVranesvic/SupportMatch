@@ -10,14 +10,14 @@ export default function FAQ() {
   return (
     <section id="faq" className="border-t border-slate-200 bg-slate-50 py-16 sm:py-24">
       <Container className="px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 items-stretch gap-8 lg:grid-cols-[1fr_auto_1fr]">
-          <div className="relative hidden h-full min-h-[200px] w-full lg:block lg:rounded-2xl">
+        <div className="grid grid-cols-1 items-stretch gap-8w lg:grid-cols-[1fr_auto_1fr]">
+          <div className="relative hidden h-full min-h-[150px] w-full lg:block lg:rounded-2xl">
             <Image
               src="/Images/Image-2.png"
               alt=""
               fill
               className="object-contain object-right"
-              sizes="(max-width: 1023px) 100px, 50vw"
+              sizes="(max-width: 1023px) 0px, 50vw"
             />
           </div>
 
