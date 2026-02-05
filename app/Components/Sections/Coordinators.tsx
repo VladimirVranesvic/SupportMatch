@@ -7,18 +7,11 @@ import PrimaryButton from "../UI/PrimaryButton";
 import Tag from "../UI/Tag";
 
 export default function Coordinators() {
-  const benefits = [
-    "Preference-based matching across interests, skills, and language",
-    "View compliance at a glance (WWCC, Screening, First Aid)",
-    "Availability &amp; travel radius baked in",
-    "Free meet &amp; greet; no lock-ins",
-    "We invoice in line with the NDIS Price Guide",
-  ];
-
   return (
     <section id="coordinators" className="py-16 sm:py-24">
       <Container>
         <div className="grid grid-cols-1 items-center gap-10 md:grid-cols-2">
+          {/* LEFT COLUMN - Title + Sample Profile */}
           <div>
             <SectionTitle
               eyebrow="For Support Coordinators"
@@ -29,56 +22,56 @@ export default function Coordinators() {
               }
               subtitle="Reduce back-and-forth and place with confidence. Keep families in the loop with clean, shareable profiles."
             />
-            <ul className="space-y-3 text-slate-700">
-              {benefits.map((b) => (
-                <li key={b} className="flex items-start gap-3">
-                  <Check className="mt-1 h-5 w-5 text-pink-600" />
-                  <span>{b}</span>
-                </li>
-              ))}
-            </ul>
-          </div>
-          <div className="relative">
-            <div className="absolute -inset-6 -z-10 rounded-3xl bg-gradient-to-br from-pink-200/60 to-purple-200/60 blur-2xl" />
-            <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-xl transition-shadow hover:shadow-2xl">
-              <h4 className="text-lg font-bold text-slate-900 mb-4">Sample profile</h4>
-              <div className="flex items-start justify-between">
-                <div>
-                  <h3 className="text-lg font-bold text-slate-900">Hugh P.</h3>
-                  <p className="text-sm text-slate-900">Community Access &amp; Mentoring</p>
+            
+            {/* Sample profile moved here */}
+            <div className="relative mt-8">
+              <div className="absolute -inset-6 -z-10 rounded-3xl bg-gradient-to-br from-pink-200/60 to-purple-200/60 blur-2xl" />
+               <div className="rounded-3xl border border-slate-200 bg-white p-4 shadow-xl transition-shadow hover:shadow-2xl">
+                <h4 className="text-base font-bold text-slate-900 mb-3">Sample profile</h4>
+                <div className="flex items-start justify-between">
+                  <div>
+                    <h3 className="text-base font-bold text-slate-900">Hugh P.</h3>
+                    <p className="text-xs text-slate-900">Community Access &amp; Mentoring</p>
+                  </div>
+                  <div className="flex flex-col items-end gap-1">
+                    <span className="rounded-full bg-slate-100 px-3 py-1 text-xs font-medium text-slate-900">
+                      5y exp
+                    </span>
+                    <span className="rounded-full px-2 py-0.5 text-xs font-medium bg-green-100 text-green-700">
+                      Tier 1
+                    </span>
+                  </div>
                 </div>
-                <div className="flex flex-col items-end gap-1">
-                  <span className="rounded-full bg-slate-100 px-3 py-1 text-xs font-medium text-slate-900">
-                    5y exp
-                  </span>
-                  <span className="rounded-full px-2 py-0.5 text-xs font-medium bg-green-100 text-green-700">
-                    Tier 1
-                  </span>
+                <div className="mt-2 flex items-center gap-2 text-sm text-slate-900">
+                  <MapPin className="h-4 w-4" /> Sydney • Inner West
                 </div>
+                <div className="mt-3 flex flex-wrap gap-2">
+                  <Tag>Australian</Tag>
+                  <Tag>Community Services</Tag>
+                </div>
+                <div className="mt-2 flex items-center gap-2 text-sm text-slate-900">
+                  <span className="font-semibold">Qualification:</span> Certificate IV in Disability
+                </div>
+                <div className="mt-4 flex gap-2">
+                  <PrimaryButton className="!px-4 !py-2 text-sm" href="/#request">
+                    Request intro
+                  </PrimaryButton>
+                  <button
+                    type="button"
+                    className="inline-flex items-center gap-2 rounded-2xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-900 transition hover:border-slate-300 hover:bg-slate-50"
+                  >
+                    Save
+                  </button>
+                </div>
+                <p className="mt-3 text-xs text-slate-500">Profiles are anonymised for privacy until a meet &amp; greet is confirmed.</p>
               </div>
-              <div className="mt-3 flex items-center gap-2 text-sm text-slate-900">
-                <MapPin className="h-4 w-4" /> Sydney • Inner West
-              </div>
-              <div className="mt-3 flex flex-wrap gap-2">
-                <Tag>Australian</Tag>
-                <Tag>Community Services</Tag>
-              </div>
-              <div className="mt-3 text-sm text-slate-900">
-                <span className="font-semibold">Qualification:</span> Certificate IV in Disability
-              </div>
-              <div className="mt-5 flex gap-3">
-                <PrimaryButton className="!px-4 !py-2 text-sm" href="/#request">
-                  Request intro
-                </PrimaryButton>
-                <button
-                  type="button"
-                  className="inline-flex items-center gap-2 rounded-2xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-900 transition hover:border-slate-300 hover:bg-slate-50"
-                >
-                  Save
-                </button>
-              </div>
-              <p className="mt-4 text-xs text-slate-500">Profiles are anonymised for privacy until a meet &amp; greet is confirmed.</p>
             </div>
+          </div>
+
+          {/* RIGHT COLUMN - Image placeholder */}
+          <div className="relative">
+            {/* Add your image here, e.g.: */}
+            {/* <Image src="/Images/Image-3.png" alt="" width={600} height={500} className="..." /> */}
           </div>
         </div>
       </Container>
