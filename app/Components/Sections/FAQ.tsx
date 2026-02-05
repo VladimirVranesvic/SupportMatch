@@ -39,7 +39,7 @@ export default function FAQ() {
     </div>
 
     {/* Right image */}
-    <div className="absolute inset-y-0 right-0 w-[40%] max-w-[410px]">
+    <div className="absolute inset-y-0 right-0 w-[40%] max-w-[430px]">
       <Image
         src="/Images/Image-1.png"
         alt=""
