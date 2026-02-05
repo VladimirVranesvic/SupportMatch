@@ -1,3 +1,4 @@
+//Imports
 import React from "react";
 import Image from "next/image";
 import { ArrowRight } from "lucide-react";
@@ -6,21 +7,45 @@ import SectionTitle from "../UI/SectionTitle";
 import GradientText from "../UI/GradientText";
 import { FAQS } from "../../data";
 
+//Exporting the FAQ component
 export default function FAQ() {
-  return (
-    <section id="faq" className="border-t border-slate-200 bg-slate-50 py-16 sm:py-24">
+  return ( //must return 
+    //how the section is styled - visually (layout, spacing, colors) and semantically (meaning/structure for browsers, screen readers, and search engines).
+    // sets the id of the component (can be called later/page anchors) and apply the layout of the container.
+    //py-16 sm:py-24 - padding on y-axis (top/bottom) - mobile: 64px, desktop: 96px, how padding the section gets.
+    <section id="faq" className="border-t border-slate-200 bg-slate-50 py-16 sm:py-24"> 
       <Container className="px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 items-stretch gap-8w lg:grid-cols-[1fr_auto_1fr]">
-          <div className="relative hidden h-full min-h-[150px] w-full lg:block lg:rounded-2xl">
+      {/*lg - breakpoint for larger than specific screen size (1024px),
+      grid container - single grid for smaller than lg, 3 columns for larger,
+      minmax(180px,380px)_min(100%,48rem)_minmax(180px,380px)] - column sizes, rem is relative.
+      along with spacing between columns when lg.
+      */}
+        <div
+          className="
+            grid grid-cols-1 items-start gap-8 
+            lg:grid-cols-[minmax(180px,380px)_min(100%,48rem)_minmax(180px,380px)] 
+            lg:items-center lg:gap-10 xl:gap-16 
+          "
+        >
+  
+          {/* LEFT IMAGE 
+          only applies if lg, vertically centered, horizontally aligned to the right but changed to center*/}
+          <div className="hidden lg:flex lg:items-center lg:justify-center">
             <Image
               src="/Images/Image-2.png"
-              alt=""
-              fill
-              className="object-contain object-right"
-              sizes="(max-width: 1023px) 0px, 50vw"
+              alt="Decorative illustration"
+              width={420}
+              height={320}
+              className="
+                w-full max-w-[380px] h-auto 
+                object-contain 
+                drop-shadow-xl
+              "
+              priority={false}
             />
           </div>
 
+          {/* CENTER – FAQ CONTENT */}
           <div className="flex min-w-0 flex-col gap-6 lg:min-w-[min(100%,48rem)]">
             <SectionTitle
               eyebrow="Help centre"
@@ -44,13 +69,19 @@ export default function FAQ() {
             </div>
           </div>
 
-          <div className="relative hidden h-full min-h-[200px] w-full lg:block lg:rounded-2xl">
+          {/* RIGHT IMAGE */}
+          <div className="hidden lg:flex lg:items-center lg:justify-start">
             <Image
               src="/Images/Image-1.png"
-              alt=""
-              fill
-              className="object-contain object-left"
-              sizes="(max-width: 1023px) 0px, 50vw"
+              alt="Decorative illustration"
+              width={420}
+              height={320}
+              className="
+                w-full max-w-[380px] h-auto 
+                object-contain 
+                drop-shadow-xl
+              "
+              priority={false}
             />
           </div>
         </div>
