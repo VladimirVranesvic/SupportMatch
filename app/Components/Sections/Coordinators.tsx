@@ -9,16 +9,16 @@ import Image from "next/image";
 
 export default function Coordinators() {
   return (
-    <section id="coordinators" className="relative py-10 sm:py-13">
+    <section id="coordinators" className="relative py-10 sm:py-14">
         {/* Decorative image - absolute positioned, independent of grid */}
         <div className="absolute inset-0 pointer-events-none hidden md:block z-0">
-          <div className="absolute bottom-0 right-0 w-[50%] max-w-[650px]">
+          <div className="absolute top-0 bottom-0 right-0 w-[50%] max-w-[650px]">
             <Image
               src="/Images/Image-3.png"
               alt=""
               width={600}
               height={500}
-              className="object-contain object-right-bottom w-full h-auto"
+              className="object-cover object-right w-full h-full"
             />
           </div>
         </div>
