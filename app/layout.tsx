@@ -2,7 +2,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-
+import BackButton from "./Components/UI/BackButton"
 
 /*Font variables*/
 //defines geistSansn function which returns a font object from the Geist font, but only the latin portion.
@@ -40,12 +40,13 @@ export default function RootLayout({
 //Sets language to english, set our fonts that we defined eariler and uses the tailwind untility class antialiased on the text.
 }>) {
   return (
-    <html lang="en"> 
-      <body
+    <html lang="en">
+    <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
+    >
+        <BackButton />
         {children}
-      </body>
+    </body>
     </html>
   );
 }
