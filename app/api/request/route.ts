@@ -148,24 +148,45 @@ export async function POST(req: Request) {
     const replyTo = isValidEmail(body.email) ? body.email : undefined;
 
     // Send email
+    let emailResult: { data?: { id: string }; error?: { message: string } };
     try {
-      await resend.emails.send({
+      emailResult = await resend.emails.send({
         from: "Support Match <admin@supportmatch.com.au>",
         to: process.env.TO_EMAIL,
         replyTo,
         subject: "New support request",
         text: emailText,
       });
-      console.log("[/api/request] Email sent successfully");
     } catch (emailError) {
       console.error("[/api/request] Email send failed:", emailError);
-      // If DB succeeded but email failed, still return success (data is saved)
-      if (!dbError) {
-        return NextResponse.json({ ok: true } as RequestResponse);
-      }
-      // If both failed, return error
-      throw emailError;
+      const message =
+        emailError instanceof Error ? emailError.message : "Email service error";
+      return NextResponse.json(
+        {
+          ok: false,
+          error: "Email could not be sent. Please try again later.",
+          debug: process.env.NODE_ENV === "development" ? message : undefined,
+        } as RequestResponse & { debug?: string },
+        { status: 503 }
+      );
     }
+
+    if (emailResult?.error) {
+      console.error("[/api/request] Resend API error:", emailResult.error);
+      return NextResponse.json(
+        {
+          ok: false,
+          error: "Email could not be sent. Please try again later.",
+          debug:
+            process.env.NODE_ENV === "development"
+              ? emailResult.error.message
+              : undefined,
+        } as RequestResponse & { debug?: string },
+        { status: 503 }
+      );
+    }
+
+    console.log("[/api/request] Email sent successfully", emailResult?.data?.id);
 
     return NextResponse.json(
       { ok: true } as RequestResponse,

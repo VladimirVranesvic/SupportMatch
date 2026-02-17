@@ -9,7 +9,7 @@ import { cleanRegion, parseBoolean, parseNumber, formatName } from '../app/api/u
 config({ path: path.join(process.cwd(), '.env.local') });
 
 interface CSVRow {
-  name?: string;
+  "Full Name"?: string;
   region?: string;
   is_australian?: string | boolean | number;
   experience_years?: string | number;
@@ -57,7 +57,7 @@ async function migrate() {
 
   const workers = parsed.data
   .map((row) => {
-    const name = formatName((row.name ?? '').trim());
+    const name = formatName((row["Full Name"] ?? '').trim());
     const region = cleanRegion(row.region);
 
     if (!region || !name) return null;
