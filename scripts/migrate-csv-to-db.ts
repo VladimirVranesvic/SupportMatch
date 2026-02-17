@@ -63,7 +63,7 @@ async function migrate() {
     if (!region || !name) return null;
 
     return {
-      name,
+      "Full Name": name,
       region,
       is_australian: parseBoolean(row.is_australian),
       experience_years: parseNumber(row.experience_years),
