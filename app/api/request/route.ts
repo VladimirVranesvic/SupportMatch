@@ -147,8 +147,8 @@ export async function POST(req: Request) {
     const emailText = formatEmailBody(body);
     const replyTo = isValidEmail(body.email) ? body.email : undefined;
 
-    // Send email
-    let emailResult: { data?: { id: string }; error?: { message: string } };
+    // Send email (Resend returns { data, error } with null on the other branch)
+    let emailResult: { data?: { id: string } | null; error?: { message: string } | null };
     try {
       emailResult = await resend.emails.send({
         from: "Support Match <admin@supportmatch.com.au>",

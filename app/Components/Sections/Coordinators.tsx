@@ -1,5 +1,5 @@
 import React from "react";
-import { Check, MapPin } from "lucide-react";
+import { MapPin } from "lucide-react";
 import Container from "../UI/Container";
 import SectionTitle from "../UI/SectionTitle";
 import GradientText from "../UI/GradientText";
